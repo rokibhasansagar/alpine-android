@@ -10,13 +10,13 @@ env:
   global:
 install: true
 before_script:
-- docker --version
-- make --version
+  - docker --version
+  - make --version
 script:
-- make ARCH=${ARCH} PUID=${PUID} PGID=${PGID} build test
+  - make ARCH=${ARCH} PUID=${PUID} PGID=${PGID} build test
 after_success:
-- docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
-- make ARCH=${ARCH} push
+  - docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+  - make ARCH=${ARCH} push
 after_script:
-- docker logout
-- make clean
+  - docker logout
+  - make clean

@@ -5,7 +5,7 @@ ARCH      := $(shell uname -m | sed "s_armv7l_armhf_")# armhf/x86_64 auto-detect
 OPSYS     := alpine
 SHCOMMAND := /bin/bash
 SVCNAME   := android
-USERNAME  := rokibhasansagar
+USERNAME  := woahbase
 
 PUID       := $(shell id -u)
 PGID       := $(shell id -g)# gid 100(users) usually pre exists

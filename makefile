@@ -1,16 +1,16 @@
 # {{{ -- meta
 
-HOSTARCH  := x86_64# on travis.ci
-ARCH      := $(shell uname -m | sed "s_armv7l_armhf_")# armhf/x86_64 auto-detect on build and run
+HOSTARCH  := x86_64
+ARCH      := $(shell uname -m | sed "s_armv7l_armhf_")
 OPSYS     := alpine
 SHCOMMAND := /bin/bash
 SVCNAME   := android
 USERNAME  := woahbase
 
-PUID       := $(shell id -u)
-PGID       := $(shell id -g)# gid 100(users) usually pre exists
+PUID       := 3434
+PGID       := 3434
 
-DOCKERSRC := $(OPSYS)-openjdk8#
+DOCKERSRC := $(OPSYS)-openjdk8
 DOCKEREPO := $(OPSYS)-$(SVCNAME)
 IMAGETAG  := $(USERNAME)/$(DOCKEREPO):$(ARCH)
 
@@ -47,7 +47,7 @@ BUILDFLAGS := --rm --force-rm --compress -f $(CURDIR)/Dockerfile_$(ARCH) -t $(IM
 CACHEFLAGS := --no-cache=true --pull
 MOUNTFLAGS := -v $(CURDIR):/home/circleci/project
 NAMEFLAGS  := --name docker_$(CNTNAME) --hostname $(CNTNAME)
-OTHERFLAGS := -v /etc/hosts:/etc/hosts:ro -v /etc/localtime:/etc/localtime:ro # -e TZ=Asia/Dhaka
+OTHERFLAGS := -v /etc/hosts:/etc/hosts:ro -v /etc/localtime:/etc/localtime:ro -e TZ=Asia/Dhaka
 PORTFLAGS  := -p 5037:5037 -p 8100:8100
 PROXYFLAGS := --build-arg http_proxy=$(http_proxy) --build-arg https_proxy=$(https_proxy) --build-arg no_proxy=$(no_proxy)
 

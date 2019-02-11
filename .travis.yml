@@ -6,7 +6,7 @@ language: bash
 services: docker
 env:
   matrix:
-  - ARCH=x86_64 PUID=1000 PGID=1000 
+  - ARCH=x86_64 PUID=3434 PGID=3434 
   global:
 install: true
 before_script:

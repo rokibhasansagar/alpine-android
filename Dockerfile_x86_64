@@ -23,6 +23,13 @@ RUN set -xe \
         nodejs nodejs-npm \
         unzip \
         bash alpine-sdk make sudo shadow \
+
+RUN set -xe \
+    && groupadd --gid 3434 circleci \
+    && useradd --uid 3434 --gid circleci --shell /bin/bash --create-home circleci \
+    && echo 'circleci ALL=NOPASSWD: ALL' >> /etc/shadow \
+
+RUN set -xe \
     && mkdir -p \
         ${ANDROID_HOME} \
         ${GRADLE_HOME} \

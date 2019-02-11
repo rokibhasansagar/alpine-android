@@ -79,8 +79,8 @@ push :
 	docker push $(IMAGETAG2); \
 	if [ "$(ARCH)" = "$(HOSTARCH)" ]; \
 		then \
-		LATESTTAG=$$(echo $(IMAGETAG) | sed 's/:$(ARCH)/:latest/'); \
-		docker tag $(IMAGETAG) $${LATESTTAG}; \
+		LATESTTAG=$$(echo $(IMAGETAG2) | sed 's/:$(ARCH)/:latest/'); \
+		docker tag $(IMAGETAG2) $${LATESTTAG}; \
 		docker push $${LATESTTAG}; \
 	fi;
 

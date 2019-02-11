@@ -6,6 +6,7 @@ OPSYS     := alpine
 SHCOMMAND := /bin/bash
 SVCNAME   := android
 USERNAME  := woahbase
+USERNAME2  := fr3akyphantom
 
 PUID       := 3434
 PGID       := 3434
@@ -13,6 +14,7 @@ PGID       := 3434
 DOCKERSRC := $(OPSYS)-openjdk8
 DOCKEREPO := $(OPSYS)-$(SVCNAME)
 IMAGETAG  := $(USERNAME)/$(DOCKEREPO):$(ARCH)
+IMAGETAG2  := $(USERNAME2)/$(DOCKEREPO):$(ARCH)
 
 CNTNAME   := $(SVCNAME) # name for container name : docker_name, hostname : name
 
@@ -74,7 +76,7 @@ pull :
 	docker pull $(IMAGETAG)
 
 push :
-	docker push $(IMAGETAG); \
+	docker push $(IMAGETAG2); \
 	if [ "$(ARCH)" = "$(HOSTARCH)" ]; \
 		then \
 		LATESTTAG=$$(echo $(IMAGETAG) | sed 's/:$(ARCH)/:latest/'); \

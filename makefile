@@ -5,7 +5,7 @@ ARCH      := $(shell uname -m | sed "s_armv7l_armhf_")# armhf/x86_64 auto-detect
 OPSYS     := alpine
 SHCOMMAND := /bin/bash
 SVCNAME   := android
-USERNAME  := woahbase
+USERNAME  := rokibhasansagar
 
 PUID       := $(shell id -u)
 PGID       := $(shell id -g)# gid 100(users) usually pre exists
@@ -45,13 +45,13 @@ BUILDFLAGS := --rm --force-rm --compress -f $(CURDIR)/Dockerfile_$(ARCH) -t $(IM
 	--label org.label-schema.vendor=$(USERNAME)
 
 CACHEFLAGS := --no-cache=true --pull
-MOUNTFLAGS := -v $(CURDIR):/home/alpine/project
+MOUNTFLAGS := -v $(CURDIR):/home/circleci/project
 NAMEFLAGS  := --name docker_$(CNTNAME) --hostname $(CNTNAME)
-OTHERFLAGS := #-v /etc/hosts:/etc/hosts:ro -v /etc/localtime:/etc/localtime:ro # -e TZ=Asia/Kolkata
+OTHERFLAGS := -v /etc/hosts:/etc/hosts:ro -v /etc/localtime:/etc/localtime:ro # -e TZ=Asia/Dhaka
 PORTFLAGS  := -p 5037:5037 -p 8100:8100
 PROXYFLAGS := --build-arg http_proxy=$(http_proxy) --build-arg https_proxy=$(https_proxy) --build-arg no_proxy=$(no_proxy)
 
-RUNFLAGS   := -e PGID=$(PGID) -e PUID=$(PUID) -c 512 -m 3072m --workdir /home/alpine/project
+RUNFLAGS   := -e PGID=$(PGID) -e PUID=$(PUID) -c 512 -m 3072m --workdir /home/circleci/project
 
 # -- }}}
 

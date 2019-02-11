@@ -47,25 +47,25 @@ docker run --rm --privileged multiarch/qemu-user-static:register --reset
 Without the above, you can still run the image that is made for your
 architecture, e.g for an x86_64 machine..
 
-This images already has a user `alpine` configured to drop
+This images already has a user `circleci` configured to drop
 privileges to the passed `PUID`/`PGID` which is ideal if its used
 to run in non-root mode. That way you only need to specify the
-values at runtime and pass the `-u alpine` if need be. (run `id`
+values at runtime and pass the `-u circleci` if need be. (run `id`
 in your terminal to see your own `PUID`/`PGID` values.)
 
 Before you run..
 
 * Mount the project directory (where `build.gradle` or
-  `package.json` is) at `/home/alpine/project`. Mounts `PWD` by
+  `package.json` is) at `/home/circleci/project`. Mounts `PWD` by
   default.
 
-* Builds run under the user `alpine`.
+* Builds run under the user `circleci`.
 
 * Optionally, if you want to cache the jars/packages downloaded by
   gradle, so that they're downloaded once, and reused in later
-  builds, bind mount the user home directory (`/home/alpine`)
+  builds, bind mount the user home directory (`/home/circleci`)
   somewhere in your local. The packages get cached inside the
-  `/home/alpine/.gradle` folder.
+  `/home/circleci/.gradle` folder.
 
 Running `make` gets a shell.
 
@@ -75,10 +75,10 @@ docker run --rm -it \
   --name docker_android --hostname android \
   -e PGID=1000 -e PUID=1000 \
   -c 512 -m 3072m \
-  -v $PWD:/home/alpine/project \
+  -v $PWD:/home/circleci/project \
   -v /etc/localtime:/etc/localtime:ro \
   -v /etc/hosts:/etc/hosts:ro \
-  woahbase/alpine-android:x86_64
+  rokibhasansagar/alpine-android:x86_64
 ```
 
 The usual android stuff. e.g dev build a project with
@@ -88,10 +88,10 @@ docker run --rm -it \
   --name docker_android --hostname android \
   -e PGID=1000 -e PUID=1000 \
   -c 512 -m 1024m \
-  -v $PWD:/home/alpine/project \
+  -v $PWD:/home/circleci/project \
   -v /etc/localtime:/etc/localtime:ro \
   -v /etc/hosts:/etc/hosts:ro \
-  woahbase/alpine-android:x86_64 \
+  rokibhasansagar/alpine-android:x86_64 \
   -ec "gradle assembleDebug"
 ```
 
@@ -102,10 +102,10 @@ docker run --rm -it \
   --name docker_android --hostname android \
   -e PGID=1000 -e PUID=1000 \
   -c 512 -m 3072m \
-  -v $PWD:/home/alpine/project \
+  -v $PWD:/home/circleci/project \
   -v /etc/localtime:/etc/localtime:ro \
   -v /etc/hosts:/etc/hosts:ro \
-  woahbase/alpine-android:x86_64 \
+  rokibhasansagar/alpine-android:x86_64 \
   -ec "npm install && npm run <your build target>"
 ```
 
@@ -199,13 +199,13 @@ docker build --rm --compress --force-rm \
   --build-arg DOCKERSRC=alpine-openjdk8 \
   --build-arg PGID=1000 \
   --build-arg PUID=1000 \
-  --build-arg USERNAME=woahbase \
+  --build-arg USERNAME=rokibhasansagar \
   --build-arg GRADLE_VERSION=$(GRADLE_VERSION) \
   --build-arg NPM_VERSION=$(NPM_VERSION) \
   --build-arg SDK_TARGET=$(SDK_TARGET) \
   --build-arg SDK_TOOLS_VERSION=$(SDK_TOOLS_VERSION) \
   --build-arg SDK_API_VERSION=$(SDK_API_VERSION) \
-  -t woahbase/alpine-android:x86_64 \
+  -t rokibhasansagar/alpine-android:x86_64 \
   .
 ```
 
@@ -216,7 +216,7 @@ To check if its working..
 docker run --rm -it \
   --name docker_android --hostname android \
   -e PGID=1000 -e PUID=1000 \
-  woahbase/alpine-android:x86_64 \
+  rokibhasansagar/alpine-android:x86_64 \
   -ec 'sdkmanager --version; \
     sdkmanager --list | sed -e "/Available Packages/q" ; \
     gradle -version; \
@@ -229,7 +229,7 @@ And finally, if you have push access,
 
 ```
 # make ARCH=x86_64 push
-docker push woahbase/alpine-android:x86_64
+docker push rokibhasansagar/alpine-android:x86_64
 ```
 
 ---

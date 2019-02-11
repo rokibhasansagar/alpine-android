@@ -4,7 +4,7 @@ ARG USERNAME=frommakefile
 #
 FROM ${USERNAME}/${DOCKERSRC}:${ARCH}
 #
-ARG SDK_TOOLS_VERSION="3859397"
+ARG SDK_TOOLS_VERSION="4333796"
 ARG GRADLE_VERSION="4.7"
 ARG NPM_VERSION="latest"
 #
@@ -13,7 +13,7 @@ ARG SDK_API_VERSION="27.0.3"
 #
 ENV \
     JAVA_OPTS=" -Djava.net.useSystemProxies=true -Dhttp.noProxyHosts=${no_proxy} " \
-    ANDROID_HOME=/opt/android-sdk-linux \
+    ANDROID_HOME=/opt/android/sdk/ \
     GRADLE_HOME=/opt/gradle-$GRADLE_VERSION
 #
 RUN set -xe \
@@ -22,6 +22,7 @@ RUN set -xe \
         curl openssl git make libc-dev gcc libstdc++ \
         nodejs nodejs-npm \
         unzip \
+        bash alpine-sdk make sudo shadow\
     && mkdir -p \
         ${ANDROID_HOME} \
         ${GRADLE_HOME} \
@@ -29,27 +30,28 @@ RUN set -xe \
         -jkSL https://dl.google.com/android/repository/sdk-tools-linux-${SDK_TOOLS_VERSION}.zip \
     && unzip -q -d ${ANDROID_HOME} \
         /tmp/sdk-tools-linux-${SDK_TOOLS_VERSION}.zip \
-    && chown -Rh alpine:alpine ${ANDROID_HOME} \
+    && chown -Rh circleci:circleci ${ANDROID_HOME} \
     && curl -o /tmp/gradle-${GRADLE_VERSION}-bin.zip \
         -jkSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
     && unzip -q -d /opt \
         /tmp/gradle-${GRADLE_VERSION}-bin.zip \
-    && chown -Rh alpine:alpine ${GRADLE_HOME} \
+    && chown -Rh circleci:circleci ${GRADLE_HOME} \
     && npm install -g \
         npm@${NPM_VERSION} \
         cordova \
-    && rm -rf /var/cache/apk/* /tmp/* /root/.npm /root/.node-gyp
+    && rm -rf /var/cache/apk/* /tmp/* /root/.npm /root/.node-gyp \
+    && sed -ie 's/^root::/root:!:/' /etc/shadow" || echo "Passwordless Root Mode error!"
 #
 ENV PATH=$PATH:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${GRADLE_HOME}/bin
 #
-USER alpine
+USER circleci
 #
 RUN set -xe \
     && mkdir -p ~/.android ~/.gradle \
     && touch ~/.android/repositories.cfg \
     && echo "org.gradle.daemon=false" >> ~/.gradle/gradle.properties \
     && yes | sdkmanager --licenses 1>/dev/null \
-    && sdkmanager --update \
+    && yes | sdkmanager --update \
     && sdkmanager \
         "platforms;android-${SDK_TARGET}" \
         "build-tools;${SDK_API_VERSION}" \
@@ -59,8 +61,8 @@ RUN set -xe \
 #
 # COPY root/ /
 #
-VOLUME /home/alpine/
-WORKDIR /home/alpine/project/
+VOLUME /home/circleci/
+WORKDIR /home/circleci/project/
 #
 EXPOSE 5037 8100
 #

@@ -1,5 +1,5 @@
 os: linux
-dist: trusty
+dist: xenial
 cache: false
 sudo: required
 language: bash
@@ -7,7 +7,6 @@ services: docker
 env:
   matrix:
   - ARCH=x86_64 PUID=1000 PGID=1000 
-#  - ARCH=armhf  PUID=1001 PGID=1001
   global:
 install: true
 before_script:
